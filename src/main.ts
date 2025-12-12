@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import sharp from 'sharp';
-import { Nusawork } from './service/nusawork';
+import { PORT } from './config';
 
 const app = new Hono();
 
@@ -44,42 +44,27 @@ async function generateCoupon(name: string, expiredDate: string) {
     .png()
     .toBuffer();
 
-  const base64Image = imageBuffer.toString('base64');
-  return base64Image;
+  return imageBuffer;
 }
 
-app.get('/', async (c) => {
+app.get('/birthday-voucher', async (c) => {
+  const { name, expired } = c.req.query();
+
   try {
-    const today = new Date();
-    const expiredDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
-
-    const birthdayEmployees = await Nusawork.getTodayBirthdayEmployees();
-    
-    const rows = await Promise.all(birthdayEmployees.map(async (emp) => {
-      const image = await generateCoupon(emp.full_name, expiredDate.toLocaleDateString('en-GB'));
-      return {
-        name: emp.full_name,
-        expiredDate: expiredDate,
-        image: image,
-        whatsapp: emp.whatsapp,
-      };
-    }));
-
-    const base64ImageURL = `data:image/png;base64,${rows[0]?.image}`;
-
-    return c.html(`
-      <html>
-        <body>
-          <h1>Birthday Coupon</h1>
-          <p>Name: ${rows[0]?.name}</p>
-          <p>Expired Date: ${rows[0]?.expiredDate}</p>
-          <img src="${base64ImageURL}" alt="Coupon Image" />
-        </body>
-      </html>
-    `);
+    const imageBuffer = await generateCoupon(name, expired);
+    return new Response(imageBuffer, {
+      headers: {
+        'Content-Type': 'image/png'
+      }
+    });
   } catch (error: any) {
     return c.json({ error: error.message }, 500);
   }
 });
 
-export default app;
+export default {
+  port: PORT,
+  fetch: app.fetch,
+};
+
+console.log(`🚀 Server running on http://localhost:${PORT}`);
