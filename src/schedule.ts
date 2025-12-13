@@ -8,24 +8,7 @@ async function main(): Promise<void> {
         const today = new Date();
         const expiredDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
         
-        // Uncomment and use this if you want to fetch actual birthday employees
-        // const birthdayEmployees = await Nusawork.getTodayBirthdayEmployees();
-
-        // Sample data for demonstration
-        const birthdayEmployees = [
-            {
-                employee_id: "0202415",
-                full_name: "Fajar Rivaldi Chan",
-                date_of_birth: "2003-12-13",
-                whatsapp: "62895611024559",
-            },
-            {
-                employee_id: "0202416",
-                full_name: "William",
-                date_of_birth: "2003-12-13",
-                whatsapp: "6282284408530",
-            }
-        ];
+        const birthdayEmployees = await Nusawork.getTodayBirthdayEmployees();
 
         const rows = await Promise.all(birthdayEmployees.map(async (emp) => {
             const payload = {
