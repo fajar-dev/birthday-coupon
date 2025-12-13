@@ -30,7 +30,7 @@ async function generateCoupon(name: string, expiredDate: string) {
     <svg width="${width}" height="${height}">
       <text x="180" y="1020" 
             font-family="sans-serif" 
-            font-size="26" 
+            font-size="27" 
             font-weight="600"
             fill="#FFFFFF">${expiredDate}</text>
     </svg>
