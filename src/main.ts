@@ -18,20 +18,20 @@ async function generateCoupon(name: string, expiredDate: string) {
         </filter>
       </defs>
       <text x="68" y="555" 
-            font-family="Brush Script MT, cursive" 
-            font-size="64" 
-            font-weight="bold"
-            fill="#FDD576"
+            font-family="cursive"
+            font-size="56" 
+            font-weight="700"
+            fill="#FFD533"
             filter="url(#shadow)">${name}</text>
     </svg>
   `;
 
   const dateSvg = `
     <svg width="${width}" height="${height}">
-      <text x="185" y="1020" 
-            font-family="Arial, sans-serif" 
+      <text x="180" y="1020" 
+            font-family="sans-serif" 
             font-size="32" 
-            font-weight="bold"
+            font-weight="600"
             fill="#FFFFFF">${expiredDate}</text>
     </svg>
   `;
