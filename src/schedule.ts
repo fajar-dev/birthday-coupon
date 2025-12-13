@@ -18,6 +18,12 @@ async function main(): Promise<void> {
                 full_name: "Fajar Rivaldi Chan",
                 date_of_birth: "2003-12-13",
                 whatsapp: "62895611024559",
+            },
+            {
+                employee_id: "0202416",
+                full_name: "William",
+                date_of_birth: "2003-12-13",
+                whatsapp: "6282284408530",
             }
         ];
 
@@ -33,7 +39,7 @@ async function main(): Promise<void> {
                 }
             };
             try {
-                console.log(`Message sßent to ${emp.whatsapp}`);
+                console.log(`Message sent to ${emp.whatsapp}`);
                 await NusaContact.send(payload, emp.whatsapp);
             } catch (error) {
                 console.error(`Error sending message to ${emp.full_name}:`, error);
