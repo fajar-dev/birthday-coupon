@@ -1,4 +1,3 @@
-// cron.ts
 import { NusaContact } from './service/nusacontact';
 import { Nusawork } from './service/nusawork';
 import { BASE_URL } from './config';
