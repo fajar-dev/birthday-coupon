@@ -1,14 +1,11 @@
 {
   "name": "birthday-coupon",
   "scripts": {
-    "dev": "bun run --hot src/main.ts",
-    "start": "bun run src/main.ts",
     "build": "bun build --minify --outfile dist/main.js --target bun src/main.ts",
-    "schedule": "bun run src/schedule.ts"
+    "generate": "bun run src/main.ts"
   },
   "dependencies": {
     "axios": "^1.13.2",
-    "hono": "^4.10.8",
     "sharp": "^0.34.5"
   },
   "devDependencies": {

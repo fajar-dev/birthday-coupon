@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { NUSAWORK_API_URL, NUSAWORK_CLIENT_ID, NUSAWORK_CLIENT_SECRET } from '../config'
+import { NUSAWORK_API_URL, NUSAWORK_CLIENT_ID, NUSAWORK_CLIENT_SECRET } from './config'
 
 export class Nusawork {
     private static readonly apiUrl = NUSAWORK_API_URL
