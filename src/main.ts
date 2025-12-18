@@ -58,7 +58,7 @@ class Generate {
             }
     
             await Promise.all(birthdayEmployees.map(async (emp) => {
-                const outputFilePath = path.join(outputDir, `${emp.employee_id}-${today.toISOString().split('T')[0]}.png`);
+                const outputFilePath = path.join(outputDir, `${emp.employee_id}.png`);
                 await this.generateVoucher(emp.full_name, expiredDate.toLocaleDateString('en-GB'), outputFilePath);
                 console.log(`Generated voucher for ${emp.employee_id}`);
             }));
