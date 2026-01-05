@@ -69,30 +69,33 @@ class Generate {
             .toFile(outputPath);
     }
 
+    
     static async main(): Promise<void> {
-        try {
-            const today = new Date();
-            const expiredDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
-            
-            const birthdayEmployees = await Nusawork.getTodayBirthdayEmployees();
+        const outputDir = path.join(__dirname, '..', 'public', 'test');
 
-            const outputDir = path.join(__dirname, '..', 'public', 'voucher');
-            if (!fs.existsSync(outputDir)) {
-                fs.mkdirSync(outputDir, { recursive: true });
-            }
-    
-            await Promise.all(birthdayEmployees.map(async (emp) => {
-                const outputFilePath = path.join(outputDir, `${emp.employee_id}.png`);
-                await this.generateVoucher(emp.full_name, expiredDate.toLocaleDateString('en-GB'), outputFilePath);
-                console.log(`Generated voucher for ${emp.employee_id}`);
-            }));
-    
-            console.log("All tasks finished. Exiting...");
-            process.exit(0);
-        } catch (error) {
-            console.error("An error occurred:", error);
-            process.exit(1);
+        if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir, { recursive: true });
         }
+
+        const birthdayEmployees = await Nusawork.getEmployees();
+
+        await Promise.all(
+            birthdayEmployees.map(async (emp) => {
+                const safeFileName = emp.full_name
+                    .toLowerCase()          
+                    .trim()                
+                    .replace(/\s+/g, '-')  
+                    .replace(/[^a-z0-9-]/g, ''); 
+
+                const outputFilePath = path.join(outputDir, `${safeFileName}.png`);
+
+                await this.generateVoucher(
+                    emp.full_name,
+                    "00/00/0000",
+                    outputFilePath
+                );
+            })
+        );
     }
 }
 
