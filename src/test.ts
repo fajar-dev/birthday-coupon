@@ -14,9 +14,9 @@ class Generate {
         const templateMeta = await sharp(templatePath).metadata();
         const { width = 1080, height = 1080 } = templateMeta;
 
-        const maxChars = 22;
-        const defaultFontSize = 48;
-        const minFontSize = 32;
+        const maxChars = 17;
+        const defaultFontSize = 36;
+        const minFontSize = 24;
 
         const nameLength = name.length;
 
