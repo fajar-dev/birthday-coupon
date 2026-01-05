@@ -76,7 +76,7 @@ class Generate {
 
         const dateSvg = `
             <svg width="${width}" height="${height}">
-            <text x="185" y="1020"
+            <text x="183" y="1020"
                 font-family="sans-serif"
                 font-size="27"
                 font-weight="600"
