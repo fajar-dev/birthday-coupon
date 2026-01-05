@@ -16,7 +16,7 @@ class Generate {
 
         const maxChars = 17;
         const defaultFontSize = 48;
-        const minFontSize = 24;
+        const minFontSize = 28;
 
         const nameLength = name.length;
 
@@ -37,7 +37,7 @@ class Generate {
                         <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.5"/>
                     </filter>
                 </defs>
-                <text x="68" y="555"
+                <text x="58" y="555"
                     font-family="cursive"
                     font-size="${fontSize}"
                     font-weight="700"
