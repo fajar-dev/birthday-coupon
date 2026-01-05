@@ -14,45 +14,45 @@ class Generate {
         const templateMeta = await sharp(templatePath).metadata();
         const { width = 1080, height = 1080 } = templateMeta;
 
-        // Font sizing behavior
-        const baseFontSize = 42; // normal
-        const maxFontSize = 46;  // for very short names
-        const minFontSize = 28;  // for very long names
+       // Font size configuration
+        const baseFontSize = 42;
+        const maxFontSize = 46;
+        const minFontSize = 28;
 
-        const shortLimit = 10;   // <= this: scale up toward maxFontSize
-        const softLimit = 17;    // <= this: keep baseFontSize
-        const hardLimit = 40;    // >= this: clamp to minFontSize
+        // Character length thresholds
+        const shortLimit = 10;
+        const softLimit = 17;
+        const hardLimit = 40;
 
         const len = (name ?? '').trim().length;
 
+        // Clamp value to range [0, 1]
         const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
-        // Easing helpers (smooth transitions)
+        // Smooth size transitions
         const easeOutQuad = (x: number) => 1 - (1 - x) * (1 - x);
         const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
 
         let fontSize = baseFontSize;
 
         if (len <= shortLimit) {
-            // Short name: increase smoothly from base -> max
-            // t: 0 when len == shortLimit, 1 when len == 0
-            const t = clamp01(1 - len / shortLimit);
-            const eased = easeOutQuad(t);
+        // Increase size 
+        const t = clamp01(1 - len / shortLimit);
+        const eased = easeOutQuad(t);
 
-            fontSize = Math.round(
+        fontSize = Math.round(
             baseFontSize + eased * (maxFontSize - baseFontSize)
-            );
+        );
         } else if (len <= softLimit) {
-            // Normal length: keep base
+            // Base size 
             fontSize = baseFontSize;
         } else {
-            // Long name: decrease smoothly from base -> min
-            // t: 0 when len == softLimit, 1 when len >= hardLimit
+            // Decrease size 
             const t = clamp01((len - softLimit) / (hardLimit - softLimit));
             const eased = easeOutCubic(t);
 
             fontSize = Math.round(
-            baseFontSize - eased * (baseFontSize - minFontSize)
+                baseFontSize - eased * (baseFontSize - minFontSize)
             );
         }
 
