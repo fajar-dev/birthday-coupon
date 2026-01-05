@@ -9,67 +9,74 @@ class Generate {
         expiredDate: string,
         outputPath: string
     ) {
-        const templatePath = './public/birthday-voucher-template.png';
+    const templatePath = './public/birthday-voucher-template.png';
 
-        const templateMeta = await sharp(templatePath).metadata();
-        const { width = 1080, height = 1080 } = templateMeta;
+    const templateMeta = await sharp(templatePath).metadata();
+    const { width = 1080, height = 1080 } = templateMeta;
 
-        const maxChars = 17;
-        const defaultFontSize = 48;
-        const minFontSize = 28;
+    const defaultFontSize = 36;
+    const minFontSize = 24;
 
-        const nameLength = name.length;
+    const softLimit = 17;  
+    const hardLimit = 40;
 
-        let fontSize = defaultFontSize;
+    const len = name.trim().length;
 
-        if (nameLength > maxChars) {
-            const scale = maxChars / nameLength;
-            fontSize = Math.max(
-                Math.floor(defaultFontSize * scale),
-                minFontSize
-            );
-        }
+    // Fungsi clamp 0..1
+    const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
-        const nameSvg = `
-            <svg width="${width}" height="${height}">
-                <defs>
-                    <filter id="shadow">
-                        <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.5"/>
-                    </filter>
-                </defs>
-                <text x="58" y="555"
-                    font-family="cursive"
-                    font-size="${fontSize}"
-                    font-weight="700"
-                    fill="#FFD533"
-                    filter="url(#shadow)">
-                    ${name}
-                </text>
-            </svg>
-        `;
+    // Normalisasi panjang: 0 saat <= softLimit, 1 saat >= hardLimit
+    const t = clamp01((len - softLimit) / (hardLimit - softLimit));
 
-        const dateSvg = `
-            <svg width="${width}" height="${height}">
-                <text x="185" y="1020"
-                    font-family="sans-serif"
-                    font-size="27"
-                    font-weight="600"
-                    fill="#FFFFFF">
-                    ${expiredDate}
-                </text>
-            </svg>
-        `;
+    // Kurva halus (easeOutCubic): turun pelan dulu, makin turun saat makin panjang
+    const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
 
-        await sharp(templatePath)
-            .composite([
-                { input: Buffer.from(nameSvg), top: 0, left: 0 },
-                { input: Buffer.from(dateSvg), top: 0, left: 0 }
-            ])
-            .png()
-            .toFile(outputPath);
+    const eased = easeOutCubic(t);
+
+    // Interpolasi dari default -> min
+    const fontSize = Math.round(
+        defaultFontSize - eased * (defaultFontSize - minFontSize)
+    );
+
+    const nameSvg = `
+        <svg width="${width}" height="${height}">
+        <defs>
+            <filter id="shadow">
+            <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.5"/>
+            </filter>
+        </defs>
+        <text x="68" y="555"
+            font-family="cursive"
+            font-size="${fontSize}"
+            font-weight="700"
+            fill="#FFD533"
+            filter="url(#shadow)">
+            ${name}
+        </text>
+        </svg>
+    `;
+
+    const dateSvg = `
+        <svg width="${width}" height="${height}">
+        <text x="185" y="1020"
+            font-family="sans-serif"
+            font-size="27"
+            font-weight="600"
+            fill="#FFFFFF">
+            ${expiredDate}
+        </text>
+        </svg>
+    `;
+
+    await sharp(templatePath)
+        .composite([
+        { input: Buffer.from(nameSvg), top: 0, left: 0 },
+        { input: Buffer.from(dateSvg), top: 0, left: 0 }
+        ])
+        .png()
+        .toFile(outputPath);
     }
 
-    
     static async main(): Promise<void> {
         const outputDir = path.join(__dirname, '..', 'public', 'test');
 
