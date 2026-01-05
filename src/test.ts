@@ -15,9 +15,9 @@ class Generate {
         const { width = 1080, height = 1080 } = templateMeta;
 
         // Font sizing behavior
-        const baseFontSize = 36; // normal
-        const maxFontSize = 44;  // for very short names
-        const minFontSize = 24;  // for very long names
+        const baseFontSize = 42; // normal
+        const maxFontSize = 46;  // for very short names
+        const minFontSize = 28;  // for very long names
 
         const shortLimit = 10;   // <= this: scale up toward maxFontSize
         const softLimit = 17;    // <= this: keep baseFontSize
