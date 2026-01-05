@@ -16,7 +16,7 @@ class Generate {
 
         const maxChars = 17;
         const defaultFontSize = 48;
-        const minFontSize = 32;
+        const minFontSize = 24;
 
         const nameLength = name.length;
 
