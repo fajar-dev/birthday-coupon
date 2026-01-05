@@ -77,7 +77,6 @@ class Generate {
         .toFile(outputPath);
     }
 
-
     static async main(): Promise<void> {
         try {
             const today = new Date();
